@@ -15,7 +15,8 @@ class Student < ActiveRecord::Base
       [MALE, FEMALE].collect{|hsh| OpenStruct.new(hsh)}
     end
   end
-  
+
   belongs_to :section
   belongs_to :house
+  has_one :exam
 end
