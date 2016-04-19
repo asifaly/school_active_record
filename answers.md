@@ -48,7 +48,7 @@ students belonging to a house of a particular class `Student.includes(:house, :s
 ------------------------------------------------------
 **Select Students and Exam**
 
-`section_students  = Student.includes(:exam, :section).where('section_id = ?', 1).references(:exam, :section)`
+`section_students  = Student.includes(:exam, :section).references(:exam, :section)`
 
 **Compute totals and create a separate array of objects with totals, section and house ids**
 totals = []
@@ -56,13 +56,13 @@ totals = []
 `totals << {id: e.id, section: e.section_id, house: e.house_id, total_marks: e.exam.english + e.exam.hindi + e.exam.science + e.exam.social + e.exam.mathematics }`  
 `end`  
 
-**Sort the array by Totals**
+**Sort the array by Totals per section id (1 is section_id)**
 
-`totals.sort_by! { |x| x[:total_marks] }.reverse`
+`section_total = totals.select { |e| e[:section] == 2 }.sort_by! { |x| x[:total_marks] }.reverse`
 
-**Find Rank**
+**Find Rank based on student_id (2 is student_id)**
 
-`totals.find_index {|x| x[:id] == 2}+1`
+`section_total.find_index {|x| x[:id] == 2}+1`
 
 (7) If we rank sections based on the average total score, what is the rank of a given section among its sibling sections?
 ------------------------------------------------------------------
@@ -71,7 +71,7 @@ totals = []
 
 `total_by_section = totals.group_by { |k| k[:section] }`
 
-{1=>[{:id=>1, :section=>1, :house=>1, :total_marks=>329}, {:id=>2, :section=>1, :house=>2, :total_marks=>359}, {:id=>3, :section=>1, :house=>2, :total_marks=>355}, {:id=>4, :section=>1, :house=>2, :total_marks=>272}, {:id=>5, :section=>1, :house=>2, :total_marks=>327}, {:id=>6, :section=>1, :house=>1, :total_marks=>247}, {:id=>7, :section=>1, :house=>3, :total_marks=>374}, {:id=>8, :section=>1, :house=>2, :total_marks=>315}, {:id=>9, :section=>1, :house=>2, :total_marks=>344}, {:id=>10, :section=>1, :house=>1, :total_marks=>266}, {:id=>11, :section=>1, :house=>3, :total_marks=>306}, {:id=>12, :section=>1, :house=>2, :total_marks=>351}, {:id=>13, :section=>1, :house=>4, :total_marks=>320}, {:id=>14, :section=>1, :house=>2, :total_marks=>283}, {:id=>15, :section=>1, :house=>2, :total_marks=>237}, {:id=>16, :section=>1, :house=>3, :total_marks=>336}, {:id=>17, :section=>1, :house=>2, :total_marks=>327}, {:id=>18, :section=>1, :house=>3, :total_marks=>348}, {:id=>19, :section=>1, :house=>1, :total_marks=>234}, {:id=>20, :section=>1, :house=>2, :total_marks=>307}]}
+{1=>[{:id=>1, :section=>1, :house=>1, :total_marks=>329}, {:id=>2, :section=>1, :house=>2, :total_marks=>359}, {:id=>3, :section=>1, :house=>2, :total_marks=>355}...], 2=>[{:id=>21, :section=>2, :house=>4, :total_marks=>270}, {:id=>22, :section=>2, :house=>4, :total_marks=>351}, {:id=>23, :section=>2, :house=>2, :total_marks=>239}...]...}
 
 **Compute average score and rank based on has values**
 
