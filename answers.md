@@ -50,7 +50,7 @@ students belonging to a house of a particular class `Student.includes(:house, :s
 
 `section_students  = Student.includes(:exam, :section).references(:exam, :section)`
 
-**Compute totals and create a separate array of objects with totals, section and house ids**
+**Compute totals and create a separate array of objects with totals, section and house ids**  
 `totals = []`  
 `section_students.each do |e|`  
 `totals << {id: e.id, section: e.section_id, house: e.house_id, total_marks: e.exam.english + e.exam.hindi + e.exam.science + e.exam.social + e.exam.mathematics }`  
