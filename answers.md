@@ -71,7 +71,7 @@ Active Record querying assignment
 
 **Sort the array by Totals per section id (1 is section_id)**
 
-`section_total = totals.select { |e| e[:section] == 2 }.sort_by! { |x| x[:total_marks] }.reverse`
+`section_total = totals.select { |e| e[:section] == 2 }.sort_by { |x| x[:total_marks] }.reverse`
 
 **Find Rank based on student_id (2 is student_id)**
 
@@ -112,7 +112,7 @@ result appears as below with section_id and average score as key and value
 (9) What is the percentile of a given students? (Percentile should be calculated on the total score. Percentile is the percentage of the students who got a score less than or equal to the current student's score)
 --------------------------------------------------------------------------
 
-`(totals.sort_by! { |x| x[:total_marks] }.find_index { |e| e[:id] == 1 } + 1)/totals.size.to_f * 100`
+`(totals.sort_by { |x| x[:total_marks] }.find_index { |e| e[:id] == 383 } + 1)/totals.size.to_f * 100`
 
 
 
