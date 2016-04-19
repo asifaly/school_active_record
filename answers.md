@@ -58,9 +58,9 @@ students belonging to a house of a particular class `Student.includes(:house, :s
 
 **Sort the array by Totals**
 
-totals.sort_by! { |x| x[:total_marks] }.reverse
+`totals.sort_by! { |x| x[:total_marks] }.reverse`
 
 **Find Rank**
 
-totals.find_index {|x| x[:id] == 2}+1
+`totals.find_index {|x| x[:id] == 2}+1`
 
