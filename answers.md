@@ -46,14 +46,14 @@ students belonging to a house of a particular class `Student.includes(:house, :s
 
 (6) What is the rank of a given student in a section?
 ------------------------------------------------------
-**Select Students and Exam for a given Section**
+**Select Students and Exam**
 
-`section1_students = Student.includes(:exam, :section).where('section_id = ?', 1).select('id','exams.id','sections.id').references(:exam, :section)`
+`section_students  = Student.includes(:exam, :section).where('section_id = ?', 1).references(:exam, :section)`
 
-**Compute totals and create a separate array of objects with totals**
-
-`section1_students.each do |e|`  
-`totals << {id: e.id, section: e.section_id, total_marks: e.exam.english + e.exam.hindi + e.exam.science + e.exam.social + e.exam.mathematics }`  
+**Compute totals and create a separate array of objects with totals, section and house ids**
+totals = []
+`section_students.each do |e|`  
+`totals << {id: e.id, section: e.section_id, house: e.house_id, total_marks: e.exam.english + e.exam.hindi + e.exam.science + e.exam.social + e.exam.mathematics }`  
 `end`  
 
 **Sort the array by Totals**
@@ -64,3 +64,23 @@ students belonging to a house of a particular class `Student.includes(:house, :s
 
 `totals.find_index {|x| x[:id] == 2}+1`
 
+(7) If we rank sections based on the average total score, what is the rank of a given section among its sibling sections?
+------------------------------------------------------------------
+
+**Use totals array from previous answer and create a new hash grouped by section as below **
+
+`total_by_section = totals.group_by { |k| k[:section] }`
+
+{1=>[{:id=>1, :section=>1, :house=>1, :total_marks=>329}, {:id=>2, :section=>1, :house=>2, :total_marks=>359}, {:id=>3, :section=>1, :house=>2, :total_marks=>355}, {:id=>4, :section=>1, :house=>2, :total_marks=>272}, {:id=>5, :section=>1, :house=>2, :total_marks=>327}, {:id=>6, :section=>1, :house=>1, :total_marks=>247}, {:id=>7, :section=>1, :house=>3, :total_marks=>374}, {:id=>8, :section=>1, :house=>2, :total_marks=>315}, {:id=>9, :section=>1, :house=>2, :total_marks=>344}, {:id=>10, :section=>1, :house=>1, :total_marks=>266}, {:id=>11, :section=>1, :house=>3, :total_marks=>306}, {:id=>12, :section=>1, :house=>2, :total_marks=>351}, {:id=>13, :section=>1, :house=>4, :total_marks=>320}, {:id=>14, :section=>1, :house=>2, :total_marks=>283}, {:id=>15, :section=>1, :house=>2, :total_marks=>237}, {:id=>16, :section=>1, :house=>3, :total_marks=>336}, {:id=>17, :section=>1, :house=>2, :total_marks=>327}, {:id=>18, :section=>1, :house=>3, :total_marks=>348}, {:id=>19, :section=>1, :house=>1, :total_marks=>234}, {:id=>20, :section=>1, :house=>2, :total_marks=>307}]}
+
+**Compute average score and rank based on has values**
+
+`section_ranks = total_by_section.map { |k,v| {k => v.map { |s| s[:total_marks] }.sum / v.size} }.sort_by { |v| v.values }.reverse`
+
+result appears as below with section_id and average score as key and value
+
+[{23=>334}, {12=>333}, {15=>332}, {19=>324}, {13=>320}, {20=>319}, {9=>318}, {7=>316}, {17=>315}, {16=>314}, {6=>313}, {24=>312}, {1=>311}, {25=>310}, {14=>309}, {21=>308}, {5=>306}, {11=>306}, {10=>305}, {18=>305}, {2=>305}, {4=>302}, {3=>301}, {22=>300}, {8=>299}]
+
+**Find Rank (x = section_id)**
+
+`section_ranks.find_index { |e|  e[x] }+1`
