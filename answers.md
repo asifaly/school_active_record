@@ -84,3 +84,16 @@ result appears as below with section_id and average score as key and value
 **Find Rank (x = section_id)**
 
 `section_ranks.find_index { |e|  e[x] }+1`
+
+(8) What is the ranking of houses, if we calculate the average total score of students belonging to each house?
+------------------------------------------------------------------------
+
+**Similar to answer 7**
+
+`total_by_house = totals.group_by { |k| k[:house] }`
+
+`house_ranks = total_by_house.map { |k,v| {k => v.map { |s| s[:total_marks] }.sum / v.size} }.sort_by { |v| v.values }.reverse`
+
+`house_ranks.find_index { |e|  e[x] }+1`
+
+
