@@ -3,9 +3,9 @@ Active Record querying assignment
 
 (1) What is the total number of students?
 -----------------------------------------
-`Student.count(:all)
-Students.all.size
-Student.count`
+`Student.count(:all)`
+`Students.all.size`
+`Student.count`
 
 **=559**
 
