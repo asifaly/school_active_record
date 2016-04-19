@@ -51,7 +51,7 @@ students belonging to a house of a particular class `Student.includes(:house, :s
 `section_students  = Student.includes(:exam, :section).references(:exam, :section)`
 
 **Compute totals and create a separate array of objects with totals, section and house ids**
-totals = []
+`totals = []`  
 `section_students.each do |e|`  
 `totals << {id: e.id, section: e.section_id, house: e.house_id, total_marks: e.exam.english + e.exam.hindi + e.exam.science + e.exam.social + e.exam.mathematics }`  
 `end`  
@@ -67,7 +67,7 @@ totals = []
 (7) If we rank sections based on the average total score, what is the rank of a given section among its sibling sections?
 ------------------------------------------------------------------
 
-**Use totals array from previous answer and create a new hash grouped by section as below **
+**Use totals array from previous answer and create a new hash grouped by section as below**
 
 `total_by_section = totals.group_by { |k| k[:section] }`
 
