@@ -3,9 +3,9 @@ Active Record querying assignment
 
 (1) What is the total number of students?
 -----------------------------------------
-`Student.count(:all)`
-`Students.all.size`
-`Student.count`
+`Student.count(:all)`  
+`Students.all.size`  
+`Student.count`  
 
 **=559**
 
@@ -42,4 +42,25 @@ students belonging to a house of a particular class `Student.includes(:house, :s
 `Exam.joins(:student).where('section_id = ?',2).average(:mathematics).to_f`
 
 **=57.8**
+
+
+(6) What is the rank of a given student in a section?
+------------------------------------------------------
+**Select Students and Exam for a given Section**
+
+`section1_students = Student.includes(:exam, :section).where('section_id = ?', 1).select('id','exams.id','sections.id').references(:exam, :section)`
+
+**Compute totals and create a separate array of objects with totals**
+
+`section1_students.each do |e|`  
+`totals << {id: e.id, section: e.section_id, total_marks: e.exam.english + e.exam.hindi + e.exam.science + e.exam.social + e.exam.mathematics }`  
+`end`  
+
+**Sort the array by Totals**
+
+totals.sort_by! { |x| x[:total_marks] }.reverse
+
+**Find Rank**
+
+totals.find_index {|x| x[:id] == 2}+1
 
